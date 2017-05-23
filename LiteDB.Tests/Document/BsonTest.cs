@@ -67,5 +67,37 @@ namespace LiteDB.Tests
             Assert.AreEqual(o["Items"].AsArray[0].AsDocument["Unit"].AsDouble, doc["Items"].AsArray[0].AsDocument["Unit"].AsDouble);
             Assert.AreEqual(o["Items"].AsArray[4].AsDateTime.ToString(), doc["Items"].AsArray[4].AsDateTime.ToString());
         }
+
+        [TestMethod]
+        public void ShouldDeserializeSameDatetimeAsSerialize()
+        {
+            var date = new DateTime(636304619445968076);
+            var sut = new BsonDocument {{"DateItem", date } };
+
+            var bson = BsonSerializer.Serialize(sut);
+            var doc = BsonSerializer.Deserialize(bson);
+
+            Assert.AreEqual(sut["DateItem"], doc["DateItem"]);
+            Assert.AreEqual(doc["DateItem"].AsDateTime, date);
+        }
+
+        [TestMethod]
+        public void ShouldSerializeDeserializeDateTimeMinMaxValue()
+        {
+            var sut = new BsonDocument
+            {
+                ["minDate"] = DateTime.MinValue,
+                ["maxDate"] = DateTime.MaxValue,
+            };
+
+            var bson = BsonSerializer.Serialize(sut);
+            var doc = BsonSerializer.Deserialize(bson);
+
+            Assert.AreEqual(sut["maxDate"], doc["maxDate"]);
+            Assert.AreEqual(sut["minDate"], doc["minDate"]);
+
+            Assert.AreEqual(DateTime.MinValue, doc["minDate"].AsDateTime);
+            Assert.AreEqual(DateTime.MaxValue, doc["maxDate"].AsDateTime);
+        }
     }
 }
