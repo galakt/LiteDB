@@ -115,7 +115,7 @@ namespace LiteDB
                     // do not convert to UTC min/max date values - #19
                     var utc = (date == DateTime.MinValue || date == DateTime.MaxValue) ? date : date.ToUniversalTime();
                     var ts = utc - BsonValue.UnixEpoch;
-                    writer.Write(Convert.ToInt64(ts.TotalMilliseconds));
+                    writer.Write(Convert.ToInt64(ts.Ticks));
                     break;
 
                 case BsonType.Null:

@@ -107,10 +107,10 @@ namespace LiteDB
                 var ts = reader.ReadInt64();
 
                 // catch specific values for MaxValue / MinValue #19
-                if (ts == 253402300800000) return DateTime.MaxValue;
-                if (ts == -62135596800000) return DateTime.MinValue;
+                if (ts == 2534023007999999999) return DateTime.MaxValue;
+                if (ts == -621355968000000000) return DateTime.MinValue;
 
-                return BsonValue.UnixEpoch.AddMilliseconds(ts).ToLocalTime();
+                return BsonValue.UnixEpoch.AddTicks(ts).ToLocalTime();
             }
             else if (type == 0x0A) // Null
             {
